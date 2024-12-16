@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -8,15 +8,7 @@ const LoginScreen = ({ navigation }) => {
     const [department, setDepartment] = useState('');
 
     const handleContinue = () => {
-        const emailPattern =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (name && emailPattern.test(email) && studentNumber.length === 7 && department ){
-            navigation.navigate('Home');
-            
-        }   
-        else {
-            Alert.alert('Invalid Login', 'Please fill all the fields. You must use UBMail');
-        }
-        
+        navigation.navigate('Home');
     };
 
     return (
@@ -26,7 +18,6 @@ const LoginScreen = ({ navigation }) => {
             <TextInput placeholder="UBmail" style={styles.input} onChangeText={setEmail} />
             <TextInput placeholder="Student/Employee Number" style={styles.input} onChangeText={setStudentNumber} />
             <TextInput placeholder="Department" style={styles.input} onChangeText={setDepartment} />
-            
             <Button title="Continue" onPress={handleContinue} />
         </View>
     );
@@ -38,4 +29,4 @@ const styles = StyleSheet.create({
     input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10, borderRadius: 5 },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

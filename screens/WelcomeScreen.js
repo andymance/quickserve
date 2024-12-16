@@ -5,7 +5,7 @@ const WelcomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Welcome to QuickServe! UBian's Canteen Ordering System</Text>
-            <Button title="Order now" onPress={() => navigation.navigate('Login')} />
+            <Button title="Log in" onPress={() => navigation.navigate('Login')} />
         </View>
     );
 };

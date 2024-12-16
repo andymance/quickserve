@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { CartContext } from '../CartContext'; // Import the CartContext
 
 const CartScreen = ({ navigation }) => {
-    const { cart } = useContext(CartContext); // Access the cart state
+    const { cart, removeFromCart } = useContext(CartContext); // Access the cart state
 
     const handleCheckout = () => {
         const total = cart.reduce((total, item) => total + item.price * item.quantity, 0); // Calculate total price
@@ -15,8 +15,10 @@ const CartScreen = ({ navigation }) => {
             <Text style={styles.title}>Your Cart</Text>
             {cart.map((item, index) => (
                 <View key={index} style={styles.item}>
+                    <Button title="Remove" onPress={()=>removeFromCart(item.id)} color="#ff5c5c" />
                     <Text>{item.name} x {item.quantity}</Text>
                     <Text>₱{item.price * item.quantity}</Text>
+                    
                 </View>
             ))}
             <Text style={styles.total}>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { Alert,View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { CartContext } from '../CartContext'; // Import the CartContext
 
 const menuItems = [
@@ -7,14 +7,23 @@ const menuItems = [
     { id: '2', name: 'Regular Burger', price: 25 },
     { id: '3', name: 'Fries', price: 35 },
     { id: '4', name: 'Churros', price: 35 },
-    { id: '5', name: 'Ginataang Paniki', price: 35 },
-    { id: '6', name: 'Kalderetang Aso', price: 20 },
-    { id: '7', name: 'Ginisang Cannabis w/ Salmon', price: 20 },
-    { id: '8', name: 'Ginisang Marijuana  Tofu and Pork', price: 20 },
 ];
 
 const HomeScreen = ({ navigation }) => {
     const { addToCart } = useContext(CartContext); // Access addToCart function
+
+    const handleLogout = () =>{
+        Alert.alert(
+           'Log out',
+           'Are you sure you want to logout?',
+           [
+            {text: 'Cancel', style: 'cancel'},
+            {text: 'OK', onPress: ()=> navigation.navigate('Login')}
+           ],
+           {canelable: false}
+        );
+
+    }
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>

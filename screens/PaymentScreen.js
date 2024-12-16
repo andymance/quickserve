@@ -29,7 +29,7 @@ const PaymentScreen = ({ navigation, route }) => {
 
             {/* Pay Button */}
             <TouchableOpacity style={styles.payButton} onPress={handlePayment}>
-                <Text style={styles.payButtonText}>Pay</Text>
+                <Text style={styles.payButtonText}>Place order</Text>
             </TouchableOpacity>
         </View>
     );
