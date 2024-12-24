@@ -2,7 +2,6 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('auth.db');
 
-// Initialize database
 export const initDB = () => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {

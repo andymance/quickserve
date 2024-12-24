@@ -1,14 +1,10 @@
 import React, { createContext, useState } from 'react';
 
-// Create the context
 export const CartContext = createContext();
 
-// Provide the context to children components
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-
-  // Add to Cart feature
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
@@ -24,11 +20,27 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  //Remove the item feature
-  const removeFromCart = (itemId) => { setCart((prevCart) => { const existingItem = prevCart.find((cartItem) => cartItem.id === itemId); if (existingItem.quantity === 1) { return prevCart.filter((cartItem) => cartItem.id !== itemId); } else { return prevCart.map((cartItem) => cartItem.id === itemId ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem ); } });
+  const removeFromCart = (itemId) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((cartItem) => cartItem.id === itemId);
+      if (existingItem.quantity === 1) {
+        return prevCart.filter((cartItem) => cartItem.id !== itemId);
+      } else {
+        return prevCart.map((cartItem) =>
+          cartItem.id === itemId
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
+        );
+      }
+    });
   };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart , removeFromCart}}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
