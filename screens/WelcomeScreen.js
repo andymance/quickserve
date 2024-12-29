@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, TextInput, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import Footer from './Footer';
+import axios from 'axios';
 import { validateEmail, validatePassword } from '../utils/validation';
 
 const WelcomeScreen = ({ navigation }) => {
@@ -84,31 +85,42 @@ const WelcomeScreen = ({ navigation }) => {
             if (!validateForm()) {
                 return;
             }
-        
+
             setIsLoading(true);
-    
-            // Simulate a delay to mimic network request
-            await new Promise(resolve => setTimeout(resolve, 1000));
-    
-            // For development/testing: check if email and password match registration format
-            if (validateEmail(formData.email) && validatePassword(formData.password)) {
+
+            // Prepare the data to be sent to the API
+            const loginData = {
+                UBmail: formData.email,
+                password: formData.password,
+            };
+
+            // Make the API call using Axios
+            const apiURL = 'http://192.168.254.105:8081/QSAPI/api/login.php';
+            const response = await axios.post(apiURL, loginData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            // Check if the response indicates success
+            if (response.data.success) {
                 // Successful login
-                navigation.navigate('Home');
+                console.log('Login Successful:', response.data);
+                navigation.navigate('Home', { user: response.data.registration });
             } else {
-                throw new Error('Invalid credentials');
+                throw new Error(response.data.message || 'Login failed');
             }
         } catch (error) {
             console.error('Error during login:', error);
             Alert.alert(
-                'Login Failed', 
-                'Please check your UBMail and password and try again.',
+                'Login Failed',
+                error.response?.data?.message || 'Please check your UBMail and password and try again.',
                 [{ text: 'OK' }]
             );
         } finally {
             setIsLoading(false);
         }
     };
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.content}>

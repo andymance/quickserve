@@ -31,11 +31,11 @@ const CartScreen = () => {
         const tracking = `TRK-${Math.floor(100000 + Math.random() * 900000)}`;
         const total = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
-        navigation.navigate('Payment', { 
-            items: cart, 
-            total, 
-            orderId, 
-            tracking 
+        navigation.navigate('Payment', {
+            items: cart,
+            total,
+            orderId,
+            tracking
         });
     };
 
@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginBottom: 10
     },
-    item: { 
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        padding: 10, 
-        borderBottomWidth: 1, 
-        borderBottomColor: '#ccc' 
+    item: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc'
     },
     itemDetails: {
         flexDirection: 'column',

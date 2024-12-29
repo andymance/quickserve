@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import Footer from './Footer';
+import axios from 'axios';
+
+
 
 const RegistrationScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -19,9 +21,16 @@ const RegistrationScreen = ({ navigation }) => {
         setAlertVisible(true);
     };
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         const emailPattern = /^[0-9]{7}@ub\.edu\.ph$/;
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+        let formData = {
+            name,
+            UBmail: email,
+            password,
+            department,
+        };
 
         if (!name || !email || !password || !department) {
             showAlert('Missing Information', 'Please fill in all fields.');
@@ -38,12 +47,33 @@ const RegistrationScreen = ({ navigation }) => {
             return;
         }
 
-        showAlert(
-            'Registration Successful',
-            'Your account has been created! Please login with your credentials.',
-            true
-        );
+        //make api call to back-end server
+        const apiURL = 'http://192.168.254.105:8081/QSAPI/api/register.php';
+        try {
+            const response = await axios.post(apiURL, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            console.log(response.data);
+            console.warn(response.status);
+            if (response.data.success) {
+                showAlert('Registration Successful' + response.data.message, true);
+
+            } else {
+                showAlert('Registration Failed: ' + response.data.message);
+
+            }
+        } catch (error) {
+            showAlert('Registration Failed', 'An error occurred while creating your account. Please try again later.');
+            console.log(error);
+            console.error('Axios Error:', error.message);
+            console.error('Error Details:', error);
+        }
     };
+
+
 
     const handleAlertClose = () => {
         setAlertVisible(false);
@@ -56,33 +86,33 @@ const RegistrationScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.modal}>
                 <Text style={styles.title}>Registration</Text>
-                <TextInput 
-                    placeholder="Name" 
-                    style={styles.input} 
+                <TextInput
+                    placeholder="Name"
+                    style={styles.input}
                     onChangeText={(text) => setName(text.toUpperCase())}
                     value={name}
                     autoCapitalize="words"
                 />
-                <TextInput 
-                    placeholder="UBMail" 
-                    style={styles.input} 
+                <TextInput
+                    placeholder="UBMail"
+                    style={styles.input}
                     onChangeText={setEmail}
                     value={email}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoComplete="email"
                 />
-                <TextInput 
-                    placeholder="Password" 
-                    style={styles.input} 
+                <TextInput
+                    placeholder="Password"
+                    style={styles.input}
                     onChangeText={setPassword}
                     value={password}
                     secureTextEntry
                     autoCapitalize="none"
                 />
-                <TextInput 
-                    placeholder="Department" 
-                    style={styles.input} 
+                <TextInput
+                    placeholder="Department"
+                    style={styles.input}
                     onChangeText={(text) => setDepartment(text.toUpperCase())}
                     value={department}
                     autoCapitalize="characters"
@@ -90,8 +120,8 @@ const RegistrationScreen = ({ navigation }) => {
                 <TouchableOpacity style={styles.button} onPress={handleContinue}>
                     <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.backButton} 
+                <TouchableOpacity
+                    style={styles.backButton}
                     onPress={() => navigation.navigate('Welcome, UBians!')}
                 >
                     <Text style={styles.backButtonText}>Back to Login</Text>
@@ -108,8 +138,8 @@ const RegistrationScreen = ({ navigation }) => {
                     <View style={styles.alertContainer}>
                         <Text style={styles.alertTitle}>{alertTitle}</Text>
                         <Text style={styles.alertMessage}>{alertMessage}</Text>
-                        <TouchableOpacity 
-                            style={styles.alertButton} 
+                        <TouchableOpacity
+                            style={styles.alertButton}
                             onPress={handleAlertClose}
                         >
                             <Text style={styles.alertButtonText}>OK</Text>
@@ -118,42 +148,42 @@ const RegistrationScreen = ({ navigation }) => {
                 </View>
             </Modal>
 
-            <Footer />
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { 
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        backgroundColor: '#FFF8DC' 
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFF8DC'
     },
-    modal: { 
+    modal: {
         width: '80%',
-        padding: 20, 
-        backgroundColor: '#FFA500', 
-        borderRadius: 10, 
-        elevation: 5, 
-        shadowColor: '#000', 
-        shadowOpacity: 0.1, 
-        shadowRadius: 8, 
+        padding: 20,
+        backgroundColor: '#FFA500',
+        borderRadius: 10,
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
         shadowOffset: { width: 0, height: 2 },
     },
-    title: { 
-        fontSize: 24, 
-        fontWeight: 'bold', 
-        marginBottom: 20, 
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
         textAlign: 'center',
         color: '#800000',
     },
-    input: { 
-        borderWidth: 1, 
-        borderColor: '#800000', 
-        padding: 10, 
-        marginBottom: 10, 
-        borderRadius: 5, 
+    input: {
+        borderWidth: 1,
+        borderColor: '#800000',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 5,
         width: '100%',
         maxWidth: 400,
         backgroundColor: '#FFFFFF',
