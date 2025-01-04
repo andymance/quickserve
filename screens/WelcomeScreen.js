@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, TextInput, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import Footer from './Footer';
-import axios from 'axios';
+import { registerUser, loginUser } from '../MyUtils/MyDB';
 import { validateEmail, validatePassword } from '../utils/validation';
 
 const WelcomeScreen = ({ navigation }) => {
@@ -85,35 +85,26 @@ const WelcomeScreen = ({ navigation }) => {
             if (!validateForm()) {
                 return;
             }
+            console.log('Form Data:', formData); // Log form data
 
             setIsLoading(true);
 
-            // Prepare the data to be sent to the API
-            const loginData = {
-                UBmail: formData.email,
-                password: formData.password,
-            };
+            // Call the loginUser  function from MyDB.js
+            const response = await loginUser(formData.email, formData.password);
 
-            // Make the API call using Axios
-            const apiURL = 'http://192.168.254.105:8081/QSAPI/api/login.php';
-            const response = await axios.post(apiURL, loginData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
             // Check if the response indicates success
-            if (response.data.success) {
+            if (response.success) {
                 // Successful login
-                console.log('Login Successful:', response.data);
-                navigation.navigate('Home', { user: response.data.registration });
+                console.log('Login Successful:', response);
+                navigation.navigate('Home', { user: response.registration });
             } else {
-                throw new Error(response.data.message || 'Login failed');
+                throw new Error(response.message || 'Login failed');
             }
         } catch (error) {
             console.error('Error during login:', error);
             Alert.alert(
                 'Login Failed',
-                error.response?.data?.message || 'Please check your UBMail and password and try again.',
+                error.message || 'Please check your UBMail and password and try again.',
                 [{ text: 'OK' }]
             );
         } finally {

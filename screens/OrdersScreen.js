@@ -52,7 +52,7 @@ const OrdersScreen = ({ navigation, route }) => {
         <View style={styles.container}>
             <View style={styles.content}>
                 <Text style={styles.title}>Your Orders</Text>
-                <FlatList 
+                <FlatList
                     data={dummyOrders}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}

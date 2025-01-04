@@ -58,15 +58,15 @@ const OrderSuccessScreen = ({ navigation, route }) => {
                 <Text style={styles.message}>Payment has been received by the vendor.</Text>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity 
-                        style={[styles.button, styles.viewOrdersButton]} 
+                    <TouchableOpacity
+                        style={[styles.button, styles.viewOrdersButton]}
                         onPress={handleViewOrders}
                     >
                         <Text style={styles.buttonText}>View Orders</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
-                        style={[styles.button, styles.homeButton]} 
+                    <TouchableOpacity
+                        style={[styles.button, styles.homeButton]}
                         onPress={handleGoToHome}
                     >
                         <Text style={styles.buttonText}>Go to Home</Text>

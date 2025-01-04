@@ -35,8 +35,8 @@ const HomeScreen = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
-            <Image 
-                source={item.image} 
+            <Image
+                source={item.image}
                 style={styles.itemImage}
                 resizeMode="cover"
                 accessibilityLabel={`Image of ${item.name}`}
@@ -65,14 +65,14 @@ const HomeScreen = ({ navigation }) => {
         <>
             <View style={styles.header}>
                 <View style={styles.iconContainer}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.iconButton}
                         onPress={() => navigation.navigate('Orders')}
                         accessibilityLabel="View Orders"
                     >
                         <Icon name="assignment" size={30} color="#FFA500" />
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.iconButton}
                         onPress={() => navigation.navigate('Cart')}
                         accessibilityLabel="View Cart"
@@ -92,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <FlatList 
+            <FlatList
                 data={menuItems}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}

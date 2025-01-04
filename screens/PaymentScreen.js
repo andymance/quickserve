@@ -18,7 +18,15 @@ const PaymentScreen = ({ navigation, route }) => {
     }, [navigation]);
 
     const handlePayment = () => {
-        navigation.navigate('Order Success', { orderId: '001', items });
+        const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+        const tracking = `TRK-${Math.floor(100000 + Math.random() * 900000)}`;
+
+        navigation.navigate('Order Success', {
+            items: items,
+            total: total,
+            orderId: orderId,
+            tracking: tracking,
+        });
     };
 
     const handleCancelOrder = () => {

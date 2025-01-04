@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import axios from 'axios';
+import { registerUser } from '../MyUtils/MyDB';
 
 
 
@@ -25,13 +25,6 @@ const RegistrationScreen = ({ navigation }) => {
         const emailPattern = /^[0-9]{7}@ub\.edu\.ph$/;
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-        let formData = {
-            name,
-            UBmail: email,
-            password,
-            department,
-        };
-
         if (!name || !email || !password || !department) {
             showAlert('Missing Information', 'Please fill in all fields.');
             return;
@@ -47,29 +40,17 @@ const RegistrationScreen = ({ navigation }) => {
             return;
         }
 
-        //make api call to back-end server
-        const apiURL = 'http://192.168.254.105:8081/QSAPI/api/register.php';
         try {
-            const response = await axios.post(apiURL, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await registerUser(name, email, password, department);
             console.log(response.data);
-            console.warn(response.status);
-            if (response.data.success) {
-                showAlert('Registration Successful' + response.data.message, true);
-
+            if (response.success) {
+                showAlert('Registration Successful', response.message, true);
             } else {
-                showAlert('Registration Failed: ' + response.data.message);
-
+                showAlert('Registration Failed: ' + response.message);
             }
         } catch (error) {
             showAlert('Registration Failed', 'An error occurred while creating your account. Please try again later.');
             console.log(error);
-            console.error('Axios Error:', error.message);
-            console.error('Error Details:', error);
         }
     };
 
@@ -89,9 +70,8 @@ const RegistrationScreen = ({ navigation }) => {
                 <TextInput
                     placeholder="Name"
                     style={styles.input}
-                    onChangeText={(text) => setName(text.toUpperCase())}
+                    onChangeText={setName}
                     value={name}
-                    autoCapitalize="words"
                 />
                 <TextInput
                     placeholder="UBMail"
